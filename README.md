@@ -53,3 +53,14 @@ is copied from the monolith (the investengine.com backend) except the difference
 listed in `.pre-commit-config.yaml`: among them strict mypy, import-linter contracts
 for the architecture ADR's layers, and formatters that fix files in place. Keep the
 rest in sync until the shared linters repo replaces the copy.
+
+## Docker image
+
+```sh
+make image                                  # mechanic:dev (app) and mechanic:test_dev (test)
+docker run --rm mechanic:dev                # runs python -m mechanic
+docker run --rm mechanic:test_dev pytest    # tests on the code baked into the image
+```
+
+`Dockerfile` has two targets: `app` (runtime deps only) and `test` (adds the dev group
+and git, built on top of `app` through the `APP_IMAGE` build arg).
