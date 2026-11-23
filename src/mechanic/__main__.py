@@ -5,6 +5,7 @@ import sys
 
 from mechanic.config import Settings
 
+
 logger = logging.getLogger("mechanic")
 
 

@@ -26,7 +26,9 @@ def test_main_logs_startup_and_returns_zero(
     caplog.set_level(logging.INFO, logger="mechanic")
 
     assert main() == 0
-    assert [(r.name, r.getMessage()) for r in caplog.records] == [("mechanic", "mechanic started")]
+    assert [(r.name, r.getMessage()) for r in caplog.records] == [
+        ("mechanic", "mechanic started")
+    ]
 
 
 def test_module_run_exits_zero_and_logs_to_stderr() -> None:
