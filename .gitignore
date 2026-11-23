@@ -1,0 +1,14 @@
+# Python caches
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Environments
+.venv/
+.env
+
+# Test and CI output
+__output__/
+test_output/
+htmlcov/
+.coverage
