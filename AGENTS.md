@@ -1,0 +1,17 @@
+# Mechanic
+
+AI triage bot for duty investigations. Python 3.12, uv, `src/mechanic`.
+See README.md for the architecture ADR.
+
+## Commands
+
+- Install: `uv sync`
+- Run: `uv run python -m mechanic` (with a local `.env`: `uv run --env-file .env python -m mechanic`)
+- Test: `make test` (= `uv run pytest`)
+
+## Conventions
+
+- Settings: `mechanic.config.Settings` (pydantic-settings), env vars prefixed `MECHANIC_`,
+  secrets as `SecretStr`. Add each new variable to `.env.template`.
+- `mechanic/__main__.py` is the composition root: it builds `Settings()` once and passes
+  it down. Nothing reads settings through a global.
