@@ -1,4 +1,5 @@
 import pytest
+
 from pydantic import ValidationError
 
 from mechanic.config import Settings
@@ -10,7 +11,9 @@ def test_log_level_defaults_to_info(monkeypatch: pytest.MonkeyPatch) -> None:
     assert Settings().log_level == "INFO"
 
 
-def test_log_level_is_read_from_prefixed_env_var(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_log_level_is_read_from_prefixed_env_var(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     monkeypatch.setenv("MECHANIC_LOG_LEVEL", "DEBUG")
 
     assert Settings().log_level == "DEBUG"
