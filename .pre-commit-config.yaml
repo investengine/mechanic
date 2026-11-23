@@ -1,0 +1,84 @@
+# Copied from investengine.com backend/.pre-commit-config.yaml so both start aligned.
+# Monolith-only hooks and path excludes are left out; keep revs and settings in sync
+# until the shared lint config (research task) replaces the copy.
+# See https://pre-commit.com for more information
+# See https://pre-commit.com/hooks.html for more hooks
+default_language_version:
+    python: python3.12
+
+repos:
+    - repo: meta
+      hooks:
+          - id: check-hooks-apply
+          - id: check-useless-excludes
+    - repo: https://github.com/pre-commit/pre-commit-hooks
+      rev: v4.1.0
+      hooks:
+          - id: trailing-whitespace
+            exclude_types: [markdown]
+          - id: end-of-file-fixer
+          # Unlike the monolith, this checks the pre-commit config itself, so the hook
+          # has a file to apply to (check-hooks-apply fails on a hook with no files)
+          - id: check-yaml
+            args: [--allow-multiple-documents]
+          - id: check-toml
+          # check-json is left out until the repo has a JSON file (check-hooks-apply)
+    - repo: https://github.com/asottile/pyupgrade
+      rev: v2.34.0
+      hooks:
+          - id: pyupgrade
+            # we use keep-runtime-typing because we use pydantic
+            # https://github.com/samuelcolvin/pydantic/issues/3300#issuecomment-1034007897
+            args: [--keep-runtime-typing, --py39-plus]
+    - repo: https://github.com/PyCQA/autoflake
+      rev: v1.7.8
+      hooks:
+          - id: autoflake
+            args: [--check]
+    - repo: https://github.com/pycqa/isort
+      rev: 5.12.0
+      hooks:
+          - id: isort
+            args: [--settings-path=pyproject.toml, --check-only, --diff]
+
+    - repo: https://github.com/psf/black
+      rev: 23.3.0
+      hooks:
+          - id: black
+            args: [--config=pyproject.toml, --check, --diff]
+            additional_dependencies: ["click==8.0.4"]
+
+    - repo: https://github.com/pre-commit/mirrors-mypy
+      rev: "v1.4.1"
+      hooks:
+          - id: mypy
+            args:
+                - --config-file=pyproject.toml
+            # have to set it here, because pre-commit sends changed files list explicitly (therefore bypassing any "exclude" or "files" in mypy config file)
+            # https://stackoverflow.com/a/75447331/699864
+            exclude: ^tests/
+            # Mechanic's typed runtime deps, at the versions in uv.lock
+            additional_dependencies:
+                - "pydantic~=2.14.4"
+                - "pydantic-settings~=2.16.3"
+
+    - repo: https://github.com/pycqa/flake8
+      rev: 6.1.0
+      hooks:
+          - id: flake8
+            args: [--config=.flake8]
+            types: [python]
+            additional_dependencies:
+                [
+                    "flake8-comprehensions==3.12.0",
+                    "flake8-debugger==4.1.2",
+                    "flake8-no-pep420==2.3.0",
+                    "flake8-noqa==1.3.1",
+                    "flake8-print==5.0.0",
+                    "flake8-useless-assert==0.4.4",
+                    "flake8-type-checking==2.4.0",
+                    "flake8-no-implicit-concat==0.3.4",
+                    "flake8-bugbear==23.5.9",
+                    "flake8-class-attributes-order==0.1.3",
+                    "flake8-simplify==0.21.0"
+                ]
