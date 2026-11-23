@@ -40,3 +40,14 @@ uv run --env-file .env python -m mechanic
 ```sh
 make test   # same as: uv run pytest
 ```
+
+## Lint
+
+```sh
+make lint            # pre-commit on all files
+make install-hooks   # run it on every commit
+```
+
+The config (`.pre-commit-config.yaml`, `.flake8`, `[tool.*]` in `pyproject.toml`)
+is copied from the investengine.com backend, so both repos lint the same way. Keep
+it in sync until a shared config replaces the copy.
