@@ -10,6 +10,7 @@ dependencies = [
 
 [dependency-groups]
 dev = [
+    "pre-commit~=4.7.0",
     "pytest~=9.0.3",
     "pytest-cov~=7.1.0",
     "teamcity-messages~=1.33.0",
@@ -22,3 +23,20 @@ build-backend = "uv_build"
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = "--strict-markers"
+
+[tool.black]
+target_version = ["py39"]
+
+[tool.isort]
+py_version = "39"
+profile = "black"
+lines_between_types = 1
+lines_after_imports = 2
+skip_gitignore = true
+
+[tool.mypy]
+ignore_missing_imports = true
+follow_imports = 'skip'
+plugins = [
+  'pydantic.mypy',
+]
