@@ -9,6 +9,8 @@ See README.md for the architecture ADR.
 - Setup: `make setup` (`uv sync`, and `.env` from `.env.template` if there's none)
 - Run: `make run` (= `uv run --env-file .env python -m mechanic`)
 - Test: `make test` (= `uv run pytest`)
+- Lint: `make lint` (pre-commit on all files; config copied from the monolith, keep it in sync)
+- Git hook: `make install-hooks`
 
 ## Conventions
 
