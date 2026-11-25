@@ -1,6 +1,13 @@
-# Copied from investengine.com backend/.pre-commit-config.yaml so both start aligned.
-# Monolith-only hooks and path excludes are left out; keep revs and settings in sync
-# until the shared lint config (research task) replaces the copy.
+# Copied from investengine.com backend/.pre-commit-config.yaml (plus backend/.flake8
+# and the [tool.*] sections of backend/pyproject.toml) at commit ed995c5eab.
+# The shared linters repo (ADR by Evgeniy Moiseev) will replace this copy. Until then
+# keep revs and settings in sync, except for these deliberate differences:
+# - Left out: monolith-only hooks and path excludes (django-upgrade, codeowners, makemigrations, frontend).
+# - check-yaml covers this file (the monolith excludes it), so the hook has a file to check.
+# - check-json is left out until the repo has a JSON file (check-hooks-apply fails otherwise).
+# - Fix mode, not check mode: the monolith checks only because its CI mounts backend/ alone.
+# - mypy is strict and runs from the project venv ([tool.mypy]).
+# - import-linter (Mechanic-only) enforces the architecture ADR ([tool.importlinter]).
 # See https://pre-commit.com for more information
 # See https://pre-commit.com/hooks.html for more hooks
 default_language_version:
