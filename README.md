@@ -49,5 +49,7 @@ make install-hooks   # run it on every commit
 ```
 
 The config (`.pre-commit-config.yaml`, `.flake8`, `[tool.*]` in `pyproject.toml`)
-is copied from the investengine.com backend, so both repos lint the same way. Keep
-it in sync until a shared config replaces the copy.
+is copied from the monolith (the investengine.com backend) except the differences
+listed in `.pre-commit-config.yaml`: among them strict mypy, import-linter contracts
+for the architecture ADR's layers, and formatters that fix files in place. Keep the
+rest in sync until the shared linters repo replaces the copy.
