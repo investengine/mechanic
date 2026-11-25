@@ -1,6 +1,7 @@
 # One Dockerfile, two targets, in the shape TeamCity's build template expects:
-#   app:  docker build --target app --build-arg VERSION=<sha> --build-arg REPO=<repo> .
+#   app:  docker build --target app --build-arg VERSION=latest --build-arg REPO=<registry>/<repo> .
 #   test: docker build --target test --build-arg APP_IMAGE=<registry>/<repo>:<sha> .
+# VERSION is the template's docker.base_version (default latest), not the commit sha.
 # Without APP_IMAGE, test builds on the app stage in this file. Don't add a
 # Dockerfile.base: the template then ignores --target.
 ARG APP_IMAGE=app
