@@ -116,13 +116,13 @@ make ci-unit   # same for unit; coverage.xml and htmlcov/ land in test_output/
 Run these from a regular clone: in a git worktree, `.git` is a file pointing outside
 the mounted directory, so lint can't find the repository.
 
-The container runs as root, so it leaves root-owned files in the checkout
-(`test_output/`, `.pytest_cache/`, `.mypy_cache/`, `__pycache__/`, `.coverage`, all
-gitignored).
+The container runs as root, so it leaves root-owned files in the checkout:
+`test_output/` (the artifacts, including coverage's `.coverage` data file), the lint
+caches `.mypy_cache/` and `.import_linter_cache/` (both ignore themselves), and the
+empty `__output__/` mount point. Unit tests write no bytecode or pytest cache.
 Remove them with:
 
 ```sh
 docker run --rm -v "$PWD":/w -w /w mechanic:test_dev \
-    rm -rf test_output __output__ .pytest_cache .mypy_cache .coverage \
-        src/mechanic/__pycache__ tests/__pycache__
+    rm -rf test_output __output__ .mypy_cache .import_linter_cache
 ```
