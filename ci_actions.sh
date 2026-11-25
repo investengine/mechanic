@@ -39,7 +39,11 @@ case "$ACTION" in
             unit)
                 echo "Running unit tests with coverage..."
                 mkdir -p __output__
-                exec pytest -vv \
+                # The container runs as root: keep bytecode, the pytest cache and
+                # the coverage data file out of the mounted checkout
+                export PYTHONDONTWRITEBYTECODE=1
+                export COVERAGE_FILE=__output__/.coverage
+                exec pytest -vv -p no:cacheprovider \
                     --cov=mechanic \
                     --cov-report=xml:__output__/coverage.xml \
                     --cov-report=html:__output__/htmlcov \
