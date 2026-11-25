@@ -48,19 +48,14 @@ repos:
             args: [--config=pyproject.toml, --check, --diff]
             additional_dependencies: ["click==8.0.4"]
 
-    - repo: https://github.com/pre-commit/mirrors-mypy
-      rev: "v1.4.1"
+    - repo: local
       hooks:
           - id: mypy
-            args:
-                - --config-file=pyproject.toml
-            # have to set it here, because pre-commit sends changed files list explicitly (therefore bypassing any "exclude" or "files" in mypy config file)
-            # https://stackoverflow.com/a/75447331/699864
-            exclude: ^tests/
-            # Mechanic's typed runtime deps, at the versions in uv.lock
-            additional_dependencies:
-                - "pydantic~=2.14.4"
-                - "pydantic-settings~=2.16.3"
+            name: mypy
+            entry: uv run --no-sync mypy
+            language: system
+            types: [python]
+            pass_filenames: false
 
     - repo: https://github.com/pycqa/flake8
       rev: 6.1.0
