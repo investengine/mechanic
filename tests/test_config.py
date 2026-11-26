@@ -19,7 +19,7 @@ def test_log_level_is_read_from_prefixed_env_var(monkeypatch: pytest.MonkeyPatch
 def test_invalid_log_level_raises(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv("MECHANIC_LOG_LEVEL", "LOUD")
 
-    with pytest.raises(ValidationError):
+    with pytest.raises(ValidationError, match="log_level"):
         Settings()
 
 
