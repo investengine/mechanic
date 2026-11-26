@@ -4,6 +4,7 @@
 setup:
 	uv sync
 	test -f .env || cp .env.template .env
+	$(MAKE) install-hooks
 
 run:
 	uv run --env-file .env python -m mechanic

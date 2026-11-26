@@ -16,7 +16,7 @@ See the architecture ADR:
 Needs [uv](https://docs.astral.sh/uv/). uv installs Python 3.14 if it's missing.
 
 ```sh
-make setup   # uv sync, and .env from .env.template if there's none
+make setup   # uv sync, .env from .env.template if there's none, and the git hook
 make run     # python -m mechanic with the settings from .env
 ```
 
@@ -33,7 +33,7 @@ make test   # same as: uv run pytest
 
 ```sh
 make lint            # pre-commit on all files
-make install-hooks   # run it on every commit
+make install-hooks   # run it on every commit (make setup does this too)
 ```
 
 The config (`.pre-commit-config.yaml`, `.flake8`, `[tool.*]` in `pyproject.toml`)
