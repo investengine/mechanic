@@ -1,19 +1,18 @@
-# Copied from investengine.com backend/.pre-commit-config.yaml (plus backend/.flake8
-# and the [tool.*] sections of backend/pyproject.toml) at commit ed995c5eab.
-# The shared linters repo (ADR by Evgeniy Moiseev) will replace this copy. Until then
+# Linter setup copied from investengine.com.
+
+# The shared linters repo is planned to replace this copy. Until then
 # keep revs and settings in sync, except for these deliberate differences:
 # - Left out: monolith-only hooks and path excludes (django-upgrade, codeowners, makemigrations, frontend).
 # - check-yaml covers this file (the monolith excludes it), so the hook has a file to check.
 # - check-json is left out until the repo has a JSON file (check-hooks-apply fails otherwise).
-# - Fix mode, not check mode: the monolith checks only because its CI mounts backend/ alone.
+# - Pre-commit runs in fix mode, not check mode: the monolith checks only because its CI mounts backend/ alone.
 # - mypy is strict and runs from the project venv ([tool.mypy]).
 # - import-linter (Mechanic-only) enforces the architecture ADR ([tool.importlinter]).
-# - Hooks run on python3.14, Mechanic's Python (the monolith's is 3.12). The monolith's
-#   pyupgrade, black, flake8-bugbear, flake8-class-attributes-order, flake8-simplify and
-#   flake8-type-checking crash on 3.14 (removed ast.Str and friends), so those are newer;
-#   each says why next to its version. pyupgrade, black and isort keep the py39 targets.
+# - Hooks run on python3.14, Mechanic's Python. The monolith's linters that crash on 3.14 are upgraded.
+
 # See https://pre-commit.com for more information
 # See https://pre-commit.com/hooks.html for more hooks
+
 default_language_version:
     python: python3.14
 

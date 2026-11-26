@@ -16,8 +16,8 @@ See the architecture ADR:
 Needs [uv](https://docs.astral.sh/uv/). uv installs Python 3.14 if it's missing.
 
 ```sh
-make setup   # uv sync, .env from .env.template if there's none, and the git hook
-make run     # python -m mechanic with the settings from .env
+make setup
+make run
 ```
 
 Settings come from environment variables prefixed `MECHANIC_`; `.env.template`
@@ -35,9 +35,3 @@ make test   # same as: uv run pytest
 make lint            # pre-commit on all files
 make install-hooks   # run it on every commit (make setup does this too)
 ```
-
-The config (`.pre-commit-config.yaml`, `.flake8`, `[tool.*]` in `pyproject.toml`)
-is copied from the monolith (the investengine.com backend) except the differences
-listed in `.pre-commit-config.yaml`: among them strict mypy, import-linter contracts
-for the architecture ADR's layers, and formatters that fix files in place. Keep the
-rest in sync until the shared linters repo replaces the copy.
