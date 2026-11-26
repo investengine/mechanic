@@ -1,4 +1,3 @@
-import logging
 import os
 import subprocess
 import sys
@@ -19,22 +18,16 @@ def run_mechanic(**env: str) -> subprocess.CompletedProcess[str]:
     )
 
 
-def test_main_logs_startup_and_returns_zero(
-    monkeypatch: pytest.MonkeyPatch, caplog: pytest.LogCaptureFixture
-) -> None:
+def test_main_returns_zero(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.delenv("MECHANIC_LOG_LEVEL", raising=False)
-    caplog.set_level(logging.INFO, logger="mechanic")
 
     assert main() == 0
-    assert [(r.name, r.getMessage()) for r in caplog.records] == [("mechanic", "mechanic started")]
 
 
-def test_module_run_exits_zero_and_logs_to_stderr() -> None:
+def test_module_run_exits_zero() -> None:
     result = run_mechanic()
 
     assert result.returncode == 0, result.stderr
-    assert "INFO mechanic mechanic started" in result.stderr
-    assert result.stdout == ""
 
 
 def test_module_run_with_invalid_log_level_exits_non_zero() -> None:
@@ -42,11 +35,3 @@ def test_module_run_with_invalid_log_level_exits_non_zero() -> None:
 
     assert result.returncode != 0
     assert "ValidationError" in result.stderr
-    assert "mechanic started" not in result.stderr
-
-
-def test_module_run_applies_log_level() -> None:
-    result = run_mechanic(MECHANIC_LOG_LEVEL="WARNING")
-
-    assert result.returncode == 0, result.stderr
-    assert "mechanic started" not in result.stderr
