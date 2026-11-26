@@ -27,10 +27,12 @@ testpaths = ["tests"]
 addopts = "--strict-markers"
 
 [tool.black]
-target_version = ["py39"]
+# the newest target black 23.12.1 knows
+target_version = ["py312"]
 
 [tool.isort]
-py_version = "39"
+# the newest py_version isort 5.12.0 accepts
+py_version = "311"
 profile = "black"
 lines_between_types = 1
 lines_after_imports = 2

@@ -9,6 +9,7 @@
 # - mypy is strict and runs from the project venv ([tool.mypy]).
 # - import-linter (Mechanic-only) enforces the architecture ADR ([tool.importlinter]).
 # - Hooks run on python3.14, Mechanic's Python. The monolith's linters that crash on 3.14 are upgraded.
+# - black, isort and pyupgrade target the newest Python each supports, not the monolith's 3.9.
 
 # See https://pre-commit.com for more information
 # See https://pre-commit.com/hooks.html for more hooks
@@ -44,9 +45,8 @@ repos:
       rev: v3.22.0
       hooks:
           - id: pyupgrade
-            # we use keep-runtime-typing because we use pydantic
-            # https://github.com/samuelcolvin/pydantic/issues/3300#issuecomment-1034007897
-            args: [--keep-runtime-typing, --py39-plus]
+            # no --keep-runtime-typing: pydantic reads X | None on 3.10+
+            args: [--py314-plus]
     - repo: https://github.com/PyCQA/autoflake
       rev: v1.7.8
       hooks:
