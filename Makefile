@@ -1,4 +1,4 @@
-.PHONY: ci-lint ci-unit image install-hooks lint run setup test
+.PHONY: ci-clean ci-lint ci-unit image install-hooks lint run setup test
 
 # Keeps an existing .env
 setup:
@@ -25,6 +25,7 @@ image:
 
 # CI stages as TeamCity's RunTestInDocker runs them: checkout, .git and the
 # artifacts dir mounted at the image's WORKDIR. Artifacts land in test_output/.
+# Lint breaks in a git worktree: .git there is a file pointing outside the mount.
 CI_WORKDIR := /data/www/investengine.com
 CI_RUN := docker run --rm --network host -e TEAMCITY_VERSION=local \
 	-v "$(CURDIR)":$(CI_WORKDIR) \
@@ -39,3 +40,8 @@ ci-lint: image
 ci-unit: image
 	mkdir -p test_output
 	$(CI_RUN) unit
+
+# The test container runs as root, so only root can remove what it leaves behind
+ci-clean:
+	docker run --rm -v "$(CURDIR)":/w -w /w mechanic:test_dev \
+		rm -rf test_output __output__ .mypy_cache .import_linter_cache

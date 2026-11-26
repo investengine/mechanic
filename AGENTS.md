@@ -11,7 +11,7 @@ See README.md for the architecture ADR.
 - Test: `make test` (= `uv run pytest`)
 - Lint: `make lint` (pre-commit on all files; config copied from the monolith except the differences listed in `.pre-commit-config.yaml`; keep the rest in sync)
 - Git hook: `make install-hooks` (`make setup` runs it)
-- CI stages as TeamCity runs them: `make ci-lint`, `make ci-unit` (build the images, run `./ci_actions.sh test <lint|unit>` in `mechanic:test_dev`)
+- CI stages as TeamCity runs them: `make ci-lint`, `make ci-unit` (build the images, run `./ci_actions.sh test <lint|unit>` in `mechanic:test_dev`); `make ci-clean` removes the root-owned files they leave
 - Images: `make image` (`mechanic:dev` from `--target app`, `mechanic:test_dev` from `--target test`)
 
 ## Conventions

@@ -53,20 +53,7 @@ TeamCity runs `./ci_actions.sh test lint` and `./ci_actions.sh test unit` in the
 image. To run the same thing locally:
 
 ```sh
-make ci-lint   # builds both images, runs ./ci_actions.sh test lint with TeamCity's mounts
-make ci-unit   # same for unit; coverage.xml and htmlcov/ land in test_output/
-```
-
-Run these from a regular clone: in a git worktree, `.git` is a file pointing outside
-the mounted directory, so lint can't find the repository.
-
-The container runs as root, so it leaves root-owned files in the checkout:
-`test_output/` (the artifacts, including coverage's `.coverage` data file), the lint
-caches `.mypy_cache/` and `.import_linter_cache/` (both ignore themselves), and the
-empty `__output__/` mount point. Unit tests write no bytecode or pytest cache.
-Remove them with:
-
-```sh
-docker run --rm -v "$PWD":/w -w /w mechanic:test_dev \
-    rm -rf test_output __output__ .mypy_cache .import_linter_cache
+make ci-lint    # builds both images, runs ./ci_actions.sh test lint with TeamCity's mounts
+make ci-unit    # same for unit; coverage.xml and htmlcov/ land in test_output/
+make ci-clean   # removes the root-owned files the container leaves in the checkout
 ```
