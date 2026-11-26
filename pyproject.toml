@@ -1,7 +1,7 @@
 [project]
 name = "mechanic"
 version = "0.1.0"
-description = "InvestEngine's internal AI assistant, starting with first-line support for investigations"
+description = "InvestEngine's internal AI assistant"
 readme = "README.md"
 requires-python = "==3.14.*"
 dependencies = [

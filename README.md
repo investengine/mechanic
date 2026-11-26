@@ -1,14 +1,15 @@
 # Mechanic
 
-Mechanic is InvestEngine's internal AI assistant. The first class of work it takes
+Mechanic is InvestEngine's internal AI assistant.
+
+The first class of work it takes
 on is first-line support for investigations: someone reports a problem, Mechanic
 gathers the evidence and replies with what it established and what it couldn't,
 before a person picks the problem up.
 
 See the architecture ADR:
 [Mechanic general architecture](https://github.com/investengine/investengine.com/pull/12559)
-(`docs/backend/decisions/backoffice/2026-11-12-mechanic-general-architecture.md`
-in investengine.com, linked as a PR until it merges).
+(`docs/backend/decisions/backoffice/2026-11-12-mechanic-general-architecture.md`).
 
 ## Run locally
 
