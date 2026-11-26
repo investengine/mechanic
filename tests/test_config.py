@@ -19,8 +19,10 @@ def test_log_level_is_read_from_prefixed_env_var(monkeypatch: pytest.MonkeyPatch
 def test_invalid_log_level_raises(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv("MECHANIC_LOG_LEVEL", "LOUD")
 
-    with pytest.raises(ValidationError, match="log_level"):
+    with pytest.raises(ValidationError) as exc_info:
         Settings()
+
+    assert [error["loc"] for error in exc_info.value.errors()] == [("log_level",)]
 
 
 def test_unprefixed_env_var_is_ignored(monkeypatch: pytest.MonkeyPatch) -> None:
