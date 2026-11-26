@@ -1,4 +1,5 @@
 import os
+import re
 import subprocess
 import sys
 
@@ -35,3 +36,6 @@ def test_module_run_with_invalid_log_level_exits_non_zero() -> None:
 
     assert result.returncode != 0
     assert "ValidationError" in result.stderr
+    # pydantic names each failing field on a line of its own; a bare "log_level"
+    # would also match the input it echoes when another field fails
+    assert re.search(r"^log_level$", result.stderr, re.MULTILINE)
