@@ -15,18 +15,12 @@ in investengine.com, linked as a PR until it merges).
 Needs [uv](https://docs.astral.sh/uv/). uv installs Python 3.14 if it's missing.
 
 ```sh
-uv sync
-uv run python -m mechanic
+make setup   # uv sync, and .env from .env.template if there's none
+make run     # python -m mechanic with the settings from .env
 ```
 
 Settings come from environment variables prefixed `MECHANIC_`; `.env.template`
-lists them. Settings don't read `.env` themselves, so either export the variables
-or pass the file to uv:
-
-```sh
-cp .env.template .env
-uv run --env-file .env python -m mechanic
-```
+lists them. Settings don't read `.env` themselves: `make run` passes it to uv.
 
 ## Test
 
