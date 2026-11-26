@@ -33,6 +33,11 @@ RUN uv sync --no-dev --frozen --no-install-project
 COPY . .
 RUN uv sync --no-dev --frozen
 
+# The app doesn't run as root. Code and venv stay root-owned and read-only to it.
+# Numeric, so Kubernetes' runAsNonRoot can verify it.
+RUN useradd --system --uid 10001 --no-create-home mechanic
+USER 10001
+
 CMD ["python", "-m", "mechanic"]
 
 FROM ${APP_IMAGE} AS app_inc
@@ -40,6 +45,10 @@ FROM ${APP_IMAGE} AS app_inc
 ###############################################################################
 # Stage: Test
 FROM app_inc AS test
+
+# Back to root: CI mounts the agent's checkout into WORKDIR and writes caches and
+# __output__ there, and RunTestInDocker gives us no way to match the agent's uid
+USER root
 
 # pre-commit needs git
 RUN apt-get update \
