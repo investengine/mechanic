@@ -3,7 +3,7 @@ name = "mechanic"
 version = "0.1.0"
 description = "InvestEngine's AI core, starting with first-line support for investigations"
 readme = "README.md"
-requires-python = "==3.12.*"
+requires-python = "==3.14.*"
 dependencies = [
     "pydantic-settings~=2.16.3",
 ]

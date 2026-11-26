@@ -19,7 +19,7 @@ line and exits.
 
 ## Run locally
 
-Needs [uv](https://docs.astral.sh/uv/). uv installs Python 3.12 if it's missing.
+Needs [uv](https://docs.astral.sh/uv/). uv installs Python 3.14 if it's missing.
 
 ```sh
 uv sync

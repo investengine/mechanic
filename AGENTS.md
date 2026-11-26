@@ -1,7 +1,7 @@
 # Mechanic
 
 InvestEngine's planned AI core. First job: first-line support for investigations,
-starting with #help-dev-en. Python 3.12, uv, `src/mechanic`.
+starting with #help-dev-en. Python 3.14, uv, `src/mechanic`.
 See README.md for the architecture ADR.
 
 ## Commands
