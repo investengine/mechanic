@@ -66,4 +66,4 @@ layers = ["mechanic.adapters", "mechanic.routing", "mechanic.service", "mechanic
 name = "Only infra sees the engine and the model provider"
 type = "forbidden"
 source_modules = ["mechanic.adapters", "mechanic.routing", "mechanic.service", "mechanic.config"]
-forbidden_modules = ["pydantic_ai", "anthropic", "langchain", "langchain_core", "langgraph"]
+forbidden_modules = ["pydantic_ai", "anthropic", "langchain", "langchain_core", "langgraph", "pydantic_graph"]
