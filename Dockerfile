@@ -7,7 +7,7 @@ ARG APP_IMAGE=app
 
 ###############################################################################
 # Stage: App
-FROM python:3.12-slim-trixie AS app
+FROM python:3.14-slim-trixie AS app
 
 # Accepted from TeamCity, unused for now
 ARG VERSION
