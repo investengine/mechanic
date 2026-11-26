@@ -1,8 +1,12 @@
 # Mechanic
 
-Mechanic is an AI triage bot for duty investigations. Someone posts a problem in
-#help-dev-en; Mechanic gathers evidence and replies with what it established and
-what it couldn't.
+Mechanic is planned to become InvestEngine's AI core. The first class of work it
+takes on is first-line support for investigations: someone reports a problem,
+Mechanic gathers the evidence and replies with what it established and what it
+couldn't, before a person picks the problem up.
+
+The first use case is #help-dev-en. Mechanic does the first pass on new threads
+there, which QA does today.
 
 It lives in its own repository with a thin image, no Django, read-only credentials,
 and its own dependencies and deploys. See the architecture ADR:
