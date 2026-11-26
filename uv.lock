@@ -94,7 +94,7 @@ requires-dist = [{ name = "pydantic-settings", specifier = "~=2.16.3" }]
 dev = [
     { name = "pytest", specifier = "~=9.0.3" },
     { name = "pytest-cov", specifier = "~=7.1.0" },
-    { name = "teamcity-messages", specifier = "~=1.33" },
+    { name = "teamcity-messages", specifier = "~=1.33.0" },
 ]
 
 [[package]]
