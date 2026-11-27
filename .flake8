@@ -1,0 +1,46 @@
+[flake8]
+max-line-length = 88
+per-file-ignores =
+    __init__.py: F401, F403
+ignore =
+    # E203, B950, E501, W503: for compatibility with Black
+    E203,
+    B950,
+    E501,
+    W503,
+    F841,
+    # E226 (whitespace around arithmetic operators, as in `x + y`):
+    # Black already formats it outside f-strings.
+    # Since Python 3.12 it also checks f-string expressions like `f"{n+1}"`,
+    # which we keep as they are.
+    E226,
+    # TODO flake8-type-checking
+    TC001,
+    TC002,
+    TC003,
+    # TODO flake8-no-implicit-concat
+    NIC002,
+    NIC102
+exclude =
+    __pycache__,
+    .git,
+    .venv
+extend-immutable-calls = Decimal
+class_attributes_order =
+    nested_class,
+    constant,
+    outer_field
+    field,
+    meta_class,
+    __new__,
+    __init__,
+    __post_init__,
+    magic_method,
+    property_method,
+    static_method,
+    class_method,
+    method,
+    private_property_method
+    private_static_method
+    private_class_method
+    private_method

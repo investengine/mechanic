@@ -10,6 +10,9 @@ dependencies = [
 
 [dependency-groups]
 dev = [
+    "import-linter~=2.17.0",
+    "mypy~=2.4.1",
+    "pre-commit~=4.7.0",
     "pytest~=9.0.3",
     "pytest-cov~=7.1.0",
     "teamcity-messages~=1.33.0",
@@ -22,3 +25,50 @@ build-backend = "uv_build"
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = "--strict-markers"
+
+[tool.black]
+# the newest target black 23.12.1 knows
+target_version = ["py312"]
+
+[tool.isort]
+# the newest py_version isort 5.12.0 accepts
+py_version = "311"
+# stdlib modules newer than py_version, which isort would sort as third-party
+extra_standard_library = ["annotationlib", "compression"]
+profile = "black"
+lines_between_types = 1
+lines_after_imports = 2
+skip_gitignore = true
+
+[tool.mypy]
+python_version = "3.14"
+strict = true
+warn_unreachable = true
+enable_error_code = ["ignore-without-code"]
+files = ["src", "tests"]
+mypy_path = "src"
+explicit_package_bases = true
+plugins = ["pydantic.mypy"]
+
+[tool.pydantic-mypy]
+init_forbid_extra = true
+init_typed = true
+warn_required_dynamic_aliases = true
+
+[tool.importlinter]
+root_package = "mechanic"
+include_external_packages = true
+
+[[tool.importlinter.contracts]]
+# Dependencies point inward. The service is the domain: it imports no other layer and
+# reaches infra only through its own ports. Infra implements those ports, so it imports
+# the service. Routing is the entry point and wiring, so it imports infra and the service.
+name = "ADR layers, dependencies point inward: adapters > routing > infra > service"
+type = "layers"
+layers = ["mechanic.adapters", "mechanic.routing", "mechanic.infra", "mechanic.service"]
+
+[[tool.importlinter.contracts]]
+name = "Only infra sees the engine and the model provider"
+type = "forbidden"
+source_modules = ["mechanic.adapters", "mechanic.routing", "mechanic.service", "mechanic.config"]
+forbidden_modules = ["pydantic_ai", "anthropic", "langchain", "langchain_core", "langgraph", "pydantic_graph"]

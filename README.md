@@ -16,8 +16,8 @@ See the architecture ADR:
 Needs [uv](https://docs.astral.sh/uv/). uv installs Python 3.14 if it's missing.
 
 ```sh
-make setup   # uv sync, and .env from .env.template if there's none
-make run     # python -m mechanic with the settings from .env
+make setup
+make run
 ```
 
 Settings come from environment variables prefixed `MECHANIC_`; `.env.template`
@@ -27,4 +27,11 @@ lists them. Settings don't read `.env` themselves: `make run` passes it to uv.
 
 ```sh
 make test   # same as: uv run pytest
+```
+
+## Lint
+
+```sh
+make lint            # pre-commit on all files
+make install-hooks   # run it on every commit (make setup does this too)
 ```
