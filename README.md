@@ -35,3 +35,14 @@ make test   # same as: uv run pytest
 make lint            # pre-commit on all files
 make install-hooks   # run it on every commit (make setup does this too)
 ```
+
+## Docker image
+
+```sh
+make image                                  # mechanic:dev (app) and mechanic:test_dev (test)
+docker run --rm mechanic:dev                # runs python -m mechanic
+docker run --rm mechanic:test_dev pytest    # tests on the code baked into the image
+```
+
+`Dockerfile` has two targets: `app` (runtime deps only) and `test` (adds the dev group
+and git, built on top of `app` through the `APP_IMAGE` build arg).

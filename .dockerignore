@@ -1,0 +1,11 @@
+.git
+.venv
+.env
+__output__
+test_output
+htmlcov
+.coverage
+**/__pycache__
+.pytest_cache
+.mypy_cache
+.import_linter_cache
