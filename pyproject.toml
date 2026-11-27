@@ -60,9 +60,12 @@ root_package = "mechanic"
 include_external_packages = true
 
 [[tool.importlinter.contracts]]
-name = "ADR layers: adapters > routing > service > infra"
+# Dependencies point inward. The service is the domain: it imports no other layer and
+# reaches infra only through its own ports. Infra implements those ports, so it imports
+# the service. Routing is the entry point and wiring, so it imports infra and the service.
+name = "ADR layers, dependencies point inward: adapters > routing > infra > service"
 type = "layers"
-layers = ["mechanic.adapters", "mechanic.routing", "mechanic.service", "mechanic.infra"]
+layers = ["mechanic.adapters", "mechanic.routing", "mechanic.infra", "mechanic.service"]
 
 [[tool.importlinter.contracts]]
 name = "Only infra sees the engine and the model provider"
