@@ -13,7 +13,7 @@ from pydantic import BaseModel, ConfigDict, Field, JsonValue, ValidationError
 
 from mechanic.service.case.errors import InvalidEntry
 from mechanic.service.case.facts import Fact
-from mechanic.service.case.reply import Outcome, Reply
+from mechanic.service.case.reply import Reply
 
 
 class Entry(BaseModel):
@@ -54,13 +54,12 @@ class Spend(BaseModel):
 
 
 class RunStatus(StrEnum):
-    """How a run ended: the reply's Outcome, or how the run stopped without one."""
+    """How a run ended, the same for every service. What the reply says is the
+    service's business, in its own Reply subclass."""
 
-    CONCLUDED = "concluded"
-    INCONCLUSIVE = "inconclusive"
-    DECLINED = "declined"
+    REPLIED = "replied"  # the handler returned a reply
     TIMED_OUT = "timed_out"
-    FAILED = "failed"
+    FAILED = "failed"  # the handler raised, or the run was stopped by a deploy
     CANCELLED = "cancelled"
 
 
@@ -77,9 +76,9 @@ class RunStarted(Entry):
 
     type_name = "run_started"
 
-    service: str  # "investigation"
+    service: str  # the handler's service name
     version: str  # image tag or git SHA
-    models: dict[str, str]  # stage -> model ID
+    models: dict[str, str] = {}  # stage -> model ID; empty for a service with none
     config: dict[str, JsonValue] = {}  # limits and anything else worth knowing
 
 
@@ -95,12 +94,12 @@ class RunFinished(Entry):
 
 
 class EvidenceRecorded(Entry):
-    """One successful data-tool call, written by the stage runner before the model
-    sees the result. Facts cite it as "E4", or one of its results as "E4/2"."""
+    """One successful data-tool call, written before anything reads the result.
+    Facts cite it as "E4", or one of its results as "E4/2"."""
 
     type_name = "evidence_recorded"
 
-    stage: str  # "investigate"
+    stage: str | None = None  # the stage that called the tool, if any
     tool: str  # "replica_query"
     request: str  # what ran, as text: the SQL, a log query
     results: tuple[JsonValue, ...]  # "E4/n" is results[n - 1]: a row, a log line
@@ -111,7 +110,7 @@ class EvidenceRecorded(Entry):
 
 
 class StageFinished(Entry):
-    """Written by the stage runner for every stage that returns an outcome. A
+    """Written by the stage runner for every stage that returns a status. A
     cancelled or failed stage writes none: RunFinished says how the run ended."""
 
     type_name = "stage_finished"
@@ -119,30 +118,21 @@ class StageFinished(Entry):
     stage: str
     status: str  # done, no_submit, usage_limit, gave_up, refused: the runner's list
     spent: Spend
+    # The submit that passed the stage's checks, as JSON the service reads back
+    # with the stage's output model. None unless the stage is done
+    output: dict[str, JsonValue] | None = None
+    facts: tuple[Fact, ...] = ()  # the output's facts, typed for the citation check
     metadata: dict[str, JsonValue] = {}
 
 
-class FindingsRecorded(Entry):
-    """Written by the service after a stage ends with a submit that passed its
-    checks. A stage stopped any other way leaves no findings, only its evidence."""
+class Replied(Entry):
+    """Written by the dispatcher for every run whose handler returned a reply. The
+    facts are typed for the citation check; the whole reply is kept as JSON, which
+    the service reads back with its own Reply subclass."""
 
-    type_name = "findings_recorded"
+    type_name = "replied"
 
-    stage: str
-    facts: tuple[Fact, ...]
-    gaps: tuple[str, ...]
-    metadata: dict[str, JsonValue] = {}
-
-
-class Answered(Entry):
-    """Written by the dispatcher for every run whose handler returned a reply.
-    Outcome and facts are typed for generic code; the whole reply is kept as JSON,
-    which the service reads back with its own Reply subclass."""
-
-    type_name = "answered"
-
-    reply_type: str  # the Reply subclass's name: "InvestigationReply"
-    outcome: Outcome
+    reply_type: str  # the Reply subclass's name, to pick the model that reads it
     facts: tuple[Fact, ...] = ()
     reply: dict[str, JsonValue]
 
@@ -152,7 +142,6 @@ class Answered(Entry):
         # the base class and drop the subclass's fields
         return cls(
             reply_type=type(reply).__name__,
-            outcome=reply.outcome,
             facts=reply.facts,
             reply=reply.model_dump(mode="json"),
         )
@@ -164,8 +153,7 @@ type CaseEvent = (
     | RunFinished
     | EvidenceRecorded
     | StageFinished
-    | FindingsRecorded
-    | Answered
+    | Replied
 )
 
 
@@ -189,8 +177,7 @@ _ENTRY_TYPES: dict[str, type[Entry]] = {
         RunFinished,
         EvidenceRecorded,
         StageFinished,
-        FindingsRecorded,
-        Answered,
+        Replied,
     )
 }
 
