@@ -46,3 +46,14 @@ docker run --rm mechanic:test_dev pytest    # tests on the code baked into the i
 
 `Dockerfile` has two targets: `app` (runtime deps only) and `test` (adds the dev group
 and git, built on top of `app` through the `APP_IMAGE` build arg).
+
+## CI
+
+TeamCity runs `./ci_actions.sh test lint` and `./ci_actions.sh test unit` in the test
+image. To run the same thing locally:
+
+```sh
+make ci-lint    # builds both images, runs ./ci_actions.sh test lint with TeamCity's mounts
+make ci-unit    # same for unit; coverage.xml and htmlcov/ land in test_output/
+make ci-clean   # removes the root-owned files the container leaves in the checkout
+```
