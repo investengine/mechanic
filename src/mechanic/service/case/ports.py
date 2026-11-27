@@ -8,8 +8,8 @@ from mechanic.service.case.events import CaseEvent, StoredEvent
 
 class CaseLog(Protocol):
     """Append-only store of case entries. Writers are the dispatcher (message
-    received, run started, run finished), the stage runner (evidence, stage finished)
-    and the service (findings, answer)."""
+    received, run started, replied, run finished) and the stage runner (evidence,
+    stage finished)."""
 
     async def append[
         E: CaseEvent

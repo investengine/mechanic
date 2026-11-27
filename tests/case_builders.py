@@ -8,7 +8,6 @@ from pydantic import JsonValue
 
 from mechanic.service.case.events import (
     EvidenceRecorded,
-    FindingsRecorded,
     Message,
     MessageReceived,
     RunFinished,
@@ -16,7 +15,6 @@ from mechanic.service.case.events import (
     RunStatus,
     Spend,
 )
-from mechanic.service.case.facts import Fact
 from mechanic.service.case.ports import CaseLog
 
 
@@ -42,13 +40,13 @@ def received(thread: str = "C1/100.1", ts: str | None = None) -> MessageReceived
 
 def started() -> RunStarted:
     return RunStarted(
-        service="investigation",
+        service="orders",
         version="dev",
-        models={"investigate": "model-a", "report": "model-b"},
+        models={"lookup": "model-a"},
     )
 
 
-def finished(status: RunStatus = RunStatus.CONCLUDED) -> RunFinished:
+def finished(status: RunStatus = RunStatus.REPLIED) -> RunFinished:
     return RunFinished(
         status=status,
         reason="",
@@ -58,16 +56,12 @@ def finished(status: RunStatus = RunStatus.CONCLUDED) -> RunFinished:
 
 def evidence(*rows: list[JsonValue]) -> EvidenceRecorded:
     return EvidenceRecorded(
-        stage="investigate",
+        stage="lookup",
         tool="replica_query",
         request="SELECT id, status FROM orders WHERE id = 17 LIMIT 200",
         results=tuple(rows) or ([17, "settled"],),
         metadata={"columns": ["id", "status"], "truncated": False},
     )
-
-
-def findings(*facts: Fact) -> FindingsRecorded:
-    return FindingsRecorded(stage="investigate", facts=facts, gaps=())
 
 
 async def open_run(log: CaseLog, thread: str = "C1/100.1") -> str:

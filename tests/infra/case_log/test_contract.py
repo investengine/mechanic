@@ -32,7 +32,7 @@ def case_log(request: pytest.FixtureRequest) -> CaseLog:
 async def test_entries_read_back_in_order_numbered_from_one(case_log: CaseLog) -> None:
     run = await open_run(case_log)
     await case_log.append(CASE, run, started())
-    await case_log.append(CASE, run, finished(RunStatus.INCONCLUSIVE))
+    await case_log.append(CASE, run, finished(RunStatus.TIMED_OUT))
 
     entries = await case_log.read(CASE)
 
@@ -41,7 +41,7 @@ async def test_entries_read_back_in_order_numbered_from_one(case_log: CaseLog) -
         (2, "run_started"),
         (3, "run_finished"),
     ]
-    assert entries[2].event == finished(RunStatus.INCONCLUSIVE)
+    assert entries[2].event == finished(RunStatus.TIMED_OUT)
     assert {(e.case_id, e.run_id) for e in entries} == {(CASE, run)}
 
 
