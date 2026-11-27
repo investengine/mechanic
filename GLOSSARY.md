@@ -50,9 +50,11 @@ submits messages and shows replies; it never reads the case log.
 _Avoid_: client, frontend, integration
 
 **Case**:
-Everything Mechanic has done for one conversation: all its runs and what they
-recorded. Its ID is the origin and the conversation. `StoredEvent.case_id`
-_Avoid_: ticket, thread, session
+Mechanic's record of one conversation, for any service: every run in it and what
+each recorded. It is the unit that is kept, deleted 30 days after its last activity
+and erased on request. Its ID is the origin and the conversation.
+`StoredEvent.case_id`
+_Avoid_: ticket, thread, session, investigation
 
 **Run**:
 One handler call for one message, from arrival to a run status. `StoredEvent.run_id`
